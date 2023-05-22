@@ -25,9 +25,6 @@ codeunit 50100 "DataFlow Frm Jnls To Ldgrs SDY"
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnBeforeVendLedgEntryInsert', '', false, false)]
     local procedure OnBeforeVendLedgEntryInsert(var VendorLedgerEntry: Record "Vendor Ledger Entry"; GenJournalLine: Record "Gen. Journal Line"; GLRegister: Record "G/L Register")
-    var
-        GLLineTemp1: Record "Gen. Journal Line";
-        GLLineTemp2: Record "Gen. Journal Line";
     begin
         if GenJournalLine."Bal. Account Type" in [GenJournalLine."Bal. Account Type"::"G/L Account", GenJournalLine."Bal. Account Type"::"Bank Account"] then
             VendorLedgerEntry."Payment Mode SDY" := VendorLedgerEntry."Payment Mode SDY"::Direct;
