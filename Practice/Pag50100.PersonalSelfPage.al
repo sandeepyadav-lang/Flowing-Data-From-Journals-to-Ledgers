@@ -67,7 +67,7 @@ page 50100 "Personal Self Page"
     var
         Boo: Code[20];
     begin
-        Boo := MyProcedure();
+        Boo := ExampleForExit();
         // if Boo then
         // ;
     end;
