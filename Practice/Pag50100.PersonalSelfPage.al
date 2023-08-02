@@ -66,23 +66,23 @@ page 50100 "Personal Self Page"
     trigger OnOpenPage()
     var
         Boo: Code[20];
+        DateText: Text;
     begin
+        //For example of exit with return value
         Boo := ExampleForExit();
-        // if Boo then
-        // ;
+        Message(Boo);
+        // For formatting the date
+        DateText := Format(WorkDate(), 0, '<Day,2>. <Month,2>. <Year4>');
+        Message(DateText);
     end;
 
     trigger OnFindRecord(Which: Text): Boolean
-    var
-        myInt: Integer;
     begin
         if Rec.Find(Which) then
             Self := Rec;
     end;
 
     trigger OnNextRecord(steps: Integer): Integer
-    var
-        myInt: Integer;
     begin
         if steps = 0 then
             exit;
@@ -90,9 +90,8 @@ page 50100 "Personal Self Page"
             Rec.Find();
     end;
 
-    local procedure ExampleForExit() Customerww: Code[20]
+    local procedure ExampleForExit(): Code[20]
     var
-        PersonalSelf: Record "Personal Self Table";
         Customer: Record Customer;
     begin
         Customer.SetRange("No.", '10000');
@@ -101,7 +100,5 @@ page 50100 "Personal Self Page"
     end;
 
     var
-        Name: Text;
-        Id: Code[20];
         Self: Record "Personal Self Table";
 }
