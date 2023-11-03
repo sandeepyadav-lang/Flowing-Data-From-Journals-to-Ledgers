@@ -8,7 +8,7 @@ page 50100 "Personal Self Page"
 
     layout
     {
-        area(content)
+        area(Content)
         {
             field(Id; Rec.Id)
             {
@@ -22,46 +22,6 @@ page 50100 "Personal Self Page"
             }
 
         }
-        // actions
-        // {
-        //     area(Processing)
-        //     {
-        //         action(crate)
-        //         {
-        //             ApplicationArea = All;
-
-        //             trigger OnAction()
-        //             var
-        //                 FieldReference: FieldRef;
-        //                 RecordReference: RecordRef;
-        //                 TableID: Integer;
-        //                 IDT: Variant;
-        //                 IDTName: Variant;
-        //                 Object: Record Object;
-        //                 fieldRecord: Record Field;
-        //                 cm: Record "Company Information";
-        //                 Customtable: Record Custom;
-        //                 PrimryKeys: Text;
-        //                 PrimaryKeysAfterDivision: List of [Text];
-        //                 i: Integer;
-        //             begin
-        //                 Object.SetRange(Type, Object.Type::Table);
-        //                 Object.SetRange(Modified, true);
-        //                 Object.SetRange(ID, 0, 50000);
-        //                 if Object.FindSet() then
-        //                     repeat
-        //                         Customtable."Table Id" := Object.ID;
-        //                         RecordReference.Open(Customtable."Table Id");
-        //                         for i := 1 to RecordReference.KeyIndex(1).FieldCount do begin
-        //                             // FieldReference := Customtable.FieldNo()
-        //                             IDT := RecordReference.KeyIndex(1).FieldIndex(i).Number;
-        //                             IDTName := IDT;
-        //                         end;
-        //                     until Object.Next() = 0;
-        //             end;
-        //         }
-        //     }
-        //}
     }
     trigger OnOpenPage()
     var
@@ -74,20 +34,24 @@ page 50100 "Personal Self Page"
         // For formatting the date
         DateText := Format(WorkDate(), 0, '<Day,2>. <Month,2>. <Year4>');
         Message(DateText);
+        JulianDatePrinting();
     end;
 
-    trigger OnFindRecord(Which: Text): Boolean
+    procedure JulianDatePrinting()
+    var
+        YearStartDate: Date;
+        CurrentYear: Integer;
+        DateRec: Record Date;
+        NoOfDays: Integer;
     begin
-        if Rec.Find(Which) then
-            Self := Rec;
-    end;
+        CurrentYear := Date2DMY(Today, 3);
+        YearStartDate := CalcDate('<-CY>', Today);
+        Message(Format(YearStartDate));
 
-    trigger OnNextRecord(steps: Integer): Integer
-    begin
-        if steps = 0 then
-            exit;
-        if Rec.Id = Self.Id then
-            Rec.Find();
+        DateRec.SETRANGE("Period Type", DateRec."Period Type"::Date);
+        DateRec.SETRANGE("Period Start", YearStartDate, Today);
+        NoOfDays := DateRec.Count;
+        Message(Format(CurrentYear) + Format(NoOfDays));
     end;
 
     local procedure ExampleForExit(): Code[20]
